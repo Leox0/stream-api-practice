@@ -98,10 +98,10 @@ public class MockService {
                 users.get(1),
                 Arrays.asList(items.get(6), items.get(9), items.get(4), items.get(4))
         ));
-        userOrderHistoryList.add(new UserOrderHistory(
+/*        userOrderHistoryList.add(new UserOrderHistory(
                 users.get(1),
                 Arrays.asList(items.get(1), items.get(0), items.get(7), items.get(3))
-        ));
+        ));*/
         userOrderHistoryList.add(new UserOrderHistory(
                 users.get(2),
                 Arrays.asList(items.get(11), items.get(9), items.get(3), items.get(1))
@@ -114,10 +114,10 @@ public class MockService {
                 users.get(4),
                 Arrays.asList(items.get(1), items.get(9), items.get(9), items.get(6))
         ));
-        userOrderHistoryList.add(new UserOrderHistory(
+/*        userOrderHistoryList.add(new UserOrderHistory(
                 users.get(4),
                 Arrays.asList(items.get(0), items.get(6))
-        ));
+        ));*/
         userOrderHistoryList.add(new UserOrderHistory(
                 users.get(6),
                 Arrays.asList(items.get(5), items.get(5), items.get(5))
