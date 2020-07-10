@@ -10,6 +10,8 @@ import week2.Streams.model.UserOrderHistory;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 class StreamApiTest {
 
@@ -22,6 +24,15 @@ class StreamApiTest {
 
     @Test
     void ktoJezdziMercedesem() {
+        List<User> mercedes2 = mockService.getUserOrderHistoryList()
+                .stream()
+                .filter(e -> e.getItems()
+                        .stream()
+                        .anyMatch(i -> i.getName().toLowerCase().contains("mercedes")))
+                .map(UserOrderHistory::getUser)
+                .collect(Collectors.toList());
+
+
         Set<User> mercedes = whoHaveMercedes();
         System.out.println("Mercedesa posiadają: ");
         System.out.println(mercedes);
@@ -56,24 +67,44 @@ class StreamApiTest {
     }
 
     @Test
-    void ktoWydalNajmniej() throws Exception { ////////do implementacji
+    void ktoWydalNajwiecej() throws Exception { ////////do implementacji
 
 
         Map<User, List<UserOrderHistory>> userToUserOrderHistory = mockService.getUserOrderHistoryList()
                 .stream()
                 .collect(Collectors.groupingBy(UserOrderHistory::getUser));
 
+        Map<User, Double> userToTotalSpendings = userToUserOrderHistory
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey, e -> e.getValue()
+                                .stream()
+                                .flatMap(f -> f.getItems()
+                                        .stream())
+                                .map(Item::getValue)
+                                .mapToDouble(f -> f).sum()
+                ));
 
-        System.out.println("dd");
+        Map.Entry<User, Double> topUserSpender = userToTotalSpendings
+                .entrySet()
+                .stream()
+                .max(Comparator.comparing(Map.Entry::getValue))
+                .orElseThrow(() -> new Exception("Nie udało się znaleźć maksymalnej wartości"));
+
+        System.out.println(topUserSpender.getKey() + " wydał najwiecej i było to dokładnie " + topUserSpender.getValue() + " PLN");
 
     }
 
     @Test
     void ktoPijeZaDuzoWina() {
+
+
+
     }
 
     @Test
-    void coMaAdamMalysz(){
+    void coMaAdamMalysz() {
         List<Item> adamMalysz = mockService.getUserOrderHistoryList()
                 .stream()
                 .filter(e -> e.getUser().getName().equalsIgnoreCase("Adam"))
@@ -84,6 +115,7 @@ class StreamApiTest {
         System.out.println(adamMalysz);
     }
 
+    @Test
     void testOptional() throws Exception {
         Optional<Item> optionalItem = mockService.getUserOrderHistoryList()
                 .stream()
@@ -97,6 +129,7 @@ class StreamApiTest {
         System.out.println(itemValue);
 
     }
+
     @Test
     void ktoKupilNajwiecejRzeczy() {
 
